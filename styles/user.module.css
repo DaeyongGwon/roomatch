@@ -1,0 +1,31 @@
+.login-container {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(212, 212, 212);
+}
+.login-form {
+    text-align: start;
+    width: 500px;
+    padding: 10px;
+    margin-bottom: 30px;
+}
+.social-login {
+    display: flex;
+    width: 500px;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.social {
+    color: white;
+    background-color: gray;
+}
+
+.user-label {
+    margin-right: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
