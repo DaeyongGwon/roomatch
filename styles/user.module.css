@@ -6,6 +6,10 @@
     background-color: rgb(212, 212, 212);
 }
 .login-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: start;
     width: 500px;
     padding: 10px;
@@ -13,9 +17,9 @@
 }
 .social-login {
     display: flex;
-    width: 500px;
     justify-content: center;
-    flex-direction: column;
+    align-items: center;
+    width: 500px;
 }
 
 .social {
@@ -28,4 +32,11 @@
     font-size: 15px;
     font-weight: bold;
     margin-bottom: 10px;
+}
+
+.user-input-label {
+    border-radius: 6px;
+    width: 200px;
+    height: 30px;
+    font-size: 10px;
 }
