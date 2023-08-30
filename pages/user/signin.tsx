@@ -26,7 +26,9 @@ export default function Signin() {
 
             // 서버로부터의 응답 처리
             if (response.status === 200) {
+                //로그인 성공시 메인 페이지로 리다이렉트
                 console.log('로그인 성공:', responseData.message);
+                window.location.href = '/';
             } else {
                 console.log('로그인 실패:', responseData.message);
             }

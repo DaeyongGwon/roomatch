@@ -1,46 +1,46 @@
-import jwt, { JwtPayload, JsonWebTokenError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import config from '@/config/token';
 import isLogin from '@/utils/login';
+import { promisify } from 'util'; // Node.js의 util 모듈 사용
 import { NextApiRequest, NextApiResponse } from 'next';
 const db = require('@/common/config/db/db');
-
-// 사용자 정의 에러 클래스
 class AuthenticationError extends Error {
     constructor(message: string) {
         super(message);
         this.name = 'AuthenticationError';
     }
 }
-
-// 로그인 POST
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const user_id = await isLogin(req, res);
     if (user_id) return res.redirect('/');
     try {
         const { userid, password } = req.body;
-        const user = db.query(`SELECT * FROM user WHERE ${userid},${password}`, function (err: any, result: any) {});
+        // db.query() 콜백을 프로미스로 변환
+        const queryAsync = promisify(db.query).bind(db);
+        const [user] = await queryAsync(
+            `SELECT * FROM user WHERE id = ${db.escape(userid)} AND pw = ${db.escape(password)}`,
+        );
+        console.log('dddd', user);
         if (!user) throw new Error('유저 정보 없음');
-        const { id } = user.dataValues;
-        // JWT 토큰 생성
+        const id = user.id;
         const access = jwt.sign({ id }, config.ACCESS_TOKEN!, {
             expiresIn: '1h',
         });
         const refresh = jwt.sign({ id }, config.REFRESH_TOKEN!, {
             expiresIn: '7d',
         });
-        // DB에 refresh 토큰 저장
-        //UPDATE [테이블] SET [열] = '변경할값' WHERE [조건]
-        await db.query(`UPDATE user SET refresh = ${refresh}`, function (err: any, result: any) {});
-        // 쿠키 생성 및 설정
+        await queryAsync(`UPDATE user SET refresh = '${refresh}' WHERE id = '${id}'`);
         if (req.body.keep == 'on') {
+            console.log('test1');
             res.setHeader('Set-Cookie', [
-                `access=${access}; HttpOnly; Secure; Max-Age=${60 * 60 * 24 * 30}`,
-                `refresh=${refresh}; HttpOnly; Secure;`,
+                `access=${access}; HttpOnly; Secure; Max-Age=${60 * 60 * 24 * 30}; Path=/`,
+                `refresh=${refresh}; HttpOnly; Secure; Path=/`,
             ]).redirect('/');
         } else {
+            console.log('test2');
             res.setHeader('Set-Cookie', [
-                `access=${access}; HttpOnly; Secure;`,
-                `refresh=${refresh}; HttpOnly; Secure;`,
+                `access=${access}; HttpOnly; Secure; Path=/`,
+                `refresh=${refresh}; HttpOnly; Secure; Path=/`,
             ]).redirect('/');
         }
     } catch (err) {
