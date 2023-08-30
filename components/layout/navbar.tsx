@@ -28,7 +28,7 @@ export default function Navbar() {
                 <Link className={styles['user-category']} href="/user/signin">
                     로그인
                 </Link>
-                <Link className={styles['user-category']} href="/signup">
+                <Link className={styles['user-category']} href="/user/signup">
                     회원가입
                 </Link>
             </div>
