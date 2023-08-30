@@ -1,0 +1,125 @@
+/* styles.css */
+
+.wrapper {
+    height: 90vh;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.inner {
+    margin: 0 auto;
+    width: 100%;
+    font: 14px/1 'ariel';
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(82, 88, 136, 1);
+    height: 90vh;
+    padding: 0px;
+    color: white;
+}
+
+.inputContainer {
+    color: black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 3px;
+    margin: 15px;
+    position: relative;
+}
+
+.input {
+    width: 460px;
+    border: 1px solid #777;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 50px;
+    padding: 0 10px 0 15px;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.inputBottom {
+    width: 460px;
+    border: 1px solid #777;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 50px;
+    padding: 0 10px 0 15px;
+    border-radius: 0px 0px 15px 15px;
+}
+
+.error {
+    border-color: red;
+}
+
+.submitBtn {
+    margin: 15px;
+    border: 0px;
+    display: block;
+    background-color: #04202f;
+    color: #fff;
+    height: 3rem;
+    border-radius: 15px;
+    font-weight: 700;
+    width: 460px;
+    max-width: 100%;
+    cursor: pointer;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    width: 460px;
+    align-items: center;
+    justify-content: center;
+}
+
+.warn {
+    display: flex;
+    align-items: center;
+    color: rgba(200, 200, 200, 0.8);
+    font-size: 0.8rem;
+    font-weight: 700;
+    position: absolute;
+}
+
+.selectProfile {
+    width: 100%;
+    height: 6rem;
+    border-radius: 100px;
+    background-color: rgba(82, 88, 136, 0.8);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.profileImage {
+    width: 70%;
+    height: 70%;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+.profile {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fieldset {
+    border: none;
+}
+
+.hidden {
+    position: absolute;
+    top: -9999px;
+    opacity: 0;
+}
