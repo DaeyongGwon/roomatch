@@ -1,3 +1,4 @@
+'use client';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import styles from '@/styles/user.module.css';
 import Image from 'next/image';
@@ -6,45 +7,40 @@ import GoogleButton from '@/public/image/google_button.png';
 import naverButton from '@/public/image/naver_button.png';
 import Link from 'next/link';
 import { useState } from 'react';
-import axios from 'axios';
 
 export default function Signin() {
     const { data: session } = useSession();
-    const [userid, setUserid] = useState<string>('');
-    const [password, setPassword] = useState<string>('');
+    const [username, setUserid] = useState<string>('');
+    const [pw, setpw] = useState<string>('');
 
     const handleLogin = async () => {
-        console.log('사용자 이름:', userid);
-        console.log('비밀번호:', password);
+        console.log('사용자 이름:', username);
+        console.log('비밀번호:', pw);
 
         try {
-            const response = await axios.post('/api/user/signin', {
-                userid: userid,
-                password: password,
+            // credentials로 아이디와 패스워드를 전송하여 로그인
+            const response = await signIn('credentials', {
+                username: username,
+                pw: pw,
+                // 필요한 추가 데이터가 있다면 여기에 추가 가능
+                redirect: false,
+                // callbackUrl: '/',
             });
-            const responseData = response.data;
-
-            // 서버로부터의 응답 처리
-            if (response.status === 200) {
-                //로그인 성공시 메인 페이지로 리다이렉트
-                console.log('로그인 성공:', responseData.message);
-                window.location.href = '/';
+            console.log('response : ', response);
+            if (response?.error) {
+                console.log('로그인 실패:', response.error);
+                return null;
             } else {
-                console.log('로그인 실패:', responseData.message);
+                //로그인 성공시 메인 페이지로 리다이렉트
+                console.log('로그인 성공');
+                // console.log('session.user', session.user);
+
+                // window.location.href = '/';
             }
         } catch (error) {
             console.error('에러 발생:', error);
         }
     };
-
-    if (session) {
-        return (
-            <>
-                {session.user?.name}님 반갑습니다 <br />
-                <button onClick={() => signOut()}>로그아웃</button>
-            </>
-        );
-    }
 
     return (
         <>
@@ -57,7 +53,7 @@ export default function Signin() {
                                 type="text"
                                 placeholder="ID"
                                 className={styles['user-input-label']}
-                                value={userid}
+                                value={username}
                                 onChange={(e) => setUserid(e.target.value)}
                             />
                         </div>
@@ -67,8 +63,8 @@ export default function Signin() {
                                 type="password"
                                 placeholder="PW"
                                 className={styles['user-input-label']}
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                value={pw}
+                                onChange={(e) => setpw(e.target.value)}
                             />
                         </div>
                     </fieldset>
