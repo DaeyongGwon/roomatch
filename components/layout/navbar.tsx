@@ -4,6 +4,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 
 export default function Navbar() {
     const { data: session } = useSession();
+
     return (
         <div className={styles.headerBox}>
             {' '}
@@ -28,10 +29,9 @@ export default function Navbar() {
             </div>
             <div className={styles.user}>
                 {session ? (
-                    <>
-                        <p>{session.user?.name}님 반갑습니다</p>
-                        <button onClick={() => signOut()}>로그아웃</button>
-                    </>
+                    <button className="px-12 py-4 border rounded-xl bg-red-300" onClick={() => signOut()}>
+                        {session.user.name}님 Log Out
+                    </button>
                 ) : (
                     <>
                         <Link className={styles['user-category']} href="/user/signin">
