@@ -12,18 +12,18 @@ function Signup() {
         formState: { errors },
     } = useForm();
     const router = useRouter();
-    const password = useRef<string>();
-    password.current = watch('password');
+    const pw = useRef<string>();
+    pw.current = watch('pw');
     const [loading, setLoading] = useState<boolean>(false);
 
     const onSubmit = async (data: any) => {
         setLoading(true);
-        const { user_id, password, email, name } = data;
+        const { id, pw, email, name } = data;
 
         try {
             const response = await axios.post(`/api/user/signup`, {
-                user_id,
-                password,
+                id,
+                pw,
                 name,
                 email,
             });
@@ -40,7 +40,7 @@ function Signup() {
             }
         } catch (error: any) {
             alert(error.response.data);
-            console.log('test5', user_id, password, email, name);
+            console.log('test5', id, pw, email, name);
         }
 
         setLoading(false);
@@ -58,21 +58,21 @@ function Signup() {
                                 <div className={styles.inputContainer}>
                                     <div className={styles.inputWrapper}>
                                         <input
-                                            className={`${styles.input} ${errors.user_id ? styles.error : ''}`}
+                                            className={`${styles.input} ${errors.id ? styles.error : ''}`}
                                             placeholder="아이디"
-                                            {...register('user_id', {
+                                            {...register('id', {
                                                 required: '아이디를 입력해주세요',
                                                 maxLength: { value: 10, message: '아이디는 10자 이하로 만들어주세요,' },
                                             })}
                                         />
-                                        {errors.user_id && <p className={styles.warn}>{errors.user_id.message}</p>}
+                                        {errors.id && <p className={styles.warn}>{errors.id.message}</p>}
                                     </div>
                                     <div className={styles.inputWrapper}>
                                         <input
-                                            className={`${styles.inputBottom} ${errors.password ? styles.error : ''}`}
+                                            className={`${styles.inputBottom} ${errors.pw ? styles.error : ''}`}
                                             type="password"
                                             placeholder="비밀번호를 입력하세요"
-                                            {...register('password', {
+                                            {...register('pw', {
                                                 required: '비밀번호를 입력해주세요',
                                                 pattern: {
                                                     value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{4,24}$/,
@@ -80,7 +80,7 @@ function Signup() {
                                                 },
                                             })}
                                         />
-                                        {errors.password && <p className={styles.warn}>{errors.password.message}</p>}
+                                        {errors.pw && <p className={styles.warn}>{errors.pw.message}</p>}
                                     </div>
                                 </div>
                                 <div className={styles.inputContainer}>

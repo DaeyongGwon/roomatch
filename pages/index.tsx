@@ -1,14 +1,26 @@
-import { signIn, useSession, signOut } from 'next-auth/react';
+'use client';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import React from 'react';
 
-export default function Signin() {
+function SignInButton() {
     const { data: session } = useSession();
-    if (session) {
+
+    if (session && session.user) {
         return (
-            <>
-                {session.user?.name}님 반갑습니다 <br />
-                <button onClick={() => signOut()}>로그아웃</button>
-            </>
+            <button className="px-12 py-4 border rounded-xl bg-red-300" onClick={() => signOut()}>
+                {session.user.name}님 <br />
+                아이디{session.user.id}
+                <br />
+                email{session.user.email}
+            </button>
         );
     }
-    return <>메인</>;
+
+    return (
+        <button className="px-12 py-4 border rounded-xl bg-yellow-300" onClick={() => signIn()}>
+            LogIn
+        </button>
+    );
 }
+
+export default SignInButton;
