@@ -23,15 +23,15 @@ export default NextAuth({
             name: 'Credentials',
             // `credentials` is used to generate a form on the sign in page.
             // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-            // e.g. domain, username, password, 2FA token, etc.
+            // e.g. domain, username, pw, 2FA token, etc.
             // You can pass any HTML attribute to the <input> tag through the object.
             credentials: {
-                user_id: {
+                username: {
                     label: '아이디',
                     type: 'text',
                     placeholder: '아이디 입력 요망',
                 },
-                password: { label: '비밀번호', type: 'password' },
+                pw: { label: '비밀번호', type: 'pw' },
             },
 
             async authorize(credentials, req) {
@@ -41,8 +41,8 @@ export default NextAuth({
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        user_id: credentials?.user_id,
-                        password: credentials?.password,
+                        username: credentials?.username,
+                        pw: credentials?.pw,
                     }),
                 });
                 const user = await res.json();
@@ -52,8 +52,9 @@ export default NextAuth({
                     return null; // 로그인 실패 시 null 반환
                 } else {
                     // 로그인 성공시 사용자 정보를 세션에 저장
-                    const { user_id, name } = user;
-                    const sessionUser = { id: user_id, name }; // 필요한 사용자 정보만 선택
+                    const { username, name } = user.user;
+                    console.log('user', user.user);
+                    const sessionUser = { id: user.user.id, name: user.user.name }; // 필요한 사용자 정보만 선택
                     console.log(sessionUser, 'sessionUser');
                     console.log('로그인 성공2');
                     return sessionUser; // 세션에 저장할 사용자 정보 반환
