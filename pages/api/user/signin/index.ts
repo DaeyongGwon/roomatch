@@ -1,34 +1,27 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import bcrypt from 'bcrypt';
-import { signJwtAccessToken } from '@/lib/jwt';
+import { signJwtAccessToken } from '@/lib/jwt'; // JWT 토큰 생성 함수
 
+// 데이터베이스 연결 설정 (db 모듈을 이용해야 함)
 const db = require('@/common/config/db/db');
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         try {
-            const { user_id, password } = req.body;
+            const { username, pw } = req.body;
 
-            // Configure MySQL
-            const [rows] = await db.promise().query('SELECT * FROM user WHERE id = ?', [user_id]);
+            // 데이터베이스에서 사용자 정보 조회
+            const [rows] = await db.promise().query('SELECT * FROM user WHERE id = ?', [username]);
+            const user = rows[0];
 
-            if (rows.length > 0) {
-                const user = rows[0];
+            if (user) {
+                // 데이터베이스에서 사용자를 찾았을 때
+                console.log('test : ', bcrypt.compareSync(pw, user.pw));
+                if (bcrypt.compareSync(pw, user.pw)) {
+                    // 비밀번호가 일치하면 JWT 토큰 생성
+                    // const accessToken = signJwtAccessToken(user.id); // 사용자 ID로 JWT 토큰 생성 함수 호출///
 
-                // 비밀번호 비교
-                const passwordMatch = await bcrypt.compare(password, user.password);
-
-                if (passwordMatch) {
-                    const { password, ...userWithoutPass } = user;
-                    const accessToken = signJwtAccessToken(userWithoutPass);
-
-                    const result = {
-                        ...userWithoutPass,
-                        accessToken,
-                        user: userWithoutPass, // user 정보를 추가합니다.
-                    };
-
-                    return res.status(200).json(result);
+                    return res.status(200).json({ message: '인증 성공', user: { id: user.id, name: user.name } });
                 }
             }
 
